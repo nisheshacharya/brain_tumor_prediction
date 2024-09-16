@@ -1,4 +1,5 @@
 import React from 'react'; 
+import '../styles/landingPage.css'; 
 import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
@@ -6,7 +7,7 @@ const LandingPage = () => {
 
   const handleStartClick = () => {
     // navigate to prediction page
-  };
+  };  
 
   return (
     <div className="landing-container">
