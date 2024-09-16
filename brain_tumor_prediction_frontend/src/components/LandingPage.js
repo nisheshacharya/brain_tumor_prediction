@@ -1,12 +1,14 @@
 import React from 'react'; 
 import '../styles/landingPage.css'; 
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const LandingPage = () => {
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
   const handleStartClick = () => {
-    // navigate to prediction page
+    navigate('/predict');
+
+    console.log("HandleStartClick clicked")
   };  
 
   return (
