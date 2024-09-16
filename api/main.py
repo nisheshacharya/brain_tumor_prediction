@@ -15,7 +15,11 @@ app.add_middleware(
 )
 
 # Include API routes
+import os
 
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+import keras
 app.include_router(router)
 
 if __name__=="__main__":
