@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 const PredictionPage = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [error, setError] = useState('');
+    const [selectedModel, setSelectedModel] = useState({model:""});
     const navigate = useNavigate();
 
     // Valid file types
@@ -19,6 +20,7 @@ const PredictionPage = () => {
         const files = Array.from(e.target.files);
         const imagesArray = [];
         let errorMessages = [];
+
 
         files.forEach(file => {
             if (validFormats.includes(file.type)) {
@@ -32,25 +34,33 @@ const PredictionPage = () => {
             setError(errorMessages.join(' '));
         } else {
             setSelectedImages((prevImages) => [...prevImages, ...imagesArray]);
-            setError(''); // Clear any previous errors
+            setError(''); // Clearing any previous errors
         }
     };
+
+    //Function for select model
+
+    const changeModel = (e) =>{
+        setSelectedModel({model: e.target.value});
+    }
 
     // Handler for deleting an image
     const handleDelete = (index) => {
         setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
     };
     const predictResult =()=>{
-        navigate('/result');
+        console.log(selectedModel);
+        selectedModel.model!== ""? navigate('/result'): alert("Select a model");
     }
 
     return (
         <div className="prediction-page">
             <h2>Choose a model</h2>
-            <select className="model-dropdown">
+            <select className="model-dropdown" onChange={changeModel}>
+                <option value="">Select the model</option>
                 <option value="modelA">Model A</option>
                 <option value="modelB">Model B</option>
-                <option value="modelC">Model C</option>
+                <option value="modelC">Model C</option> 
             </select>
 
             <div className="image-upload-section">
@@ -69,7 +79,7 @@ const PredictionPage = () => {
             {/* Display selected images */}
             {selectedImages.length > 0 && (
                 <div className="image-display-section">
-                    <h3>Selected Images</h3>
+                    <h3 className='image-display-header'>Selected Images</h3>
                     <div className="image-gallery">
                         {selectedImages.map((image, index) => (
                             <div key={index} className="image-container">
@@ -80,12 +90,7 @@ const PredictionPage = () => {
                     </div>
                 </div>
             )}
-
-            {/* This is just for testing purposes */}
-            <div className="prediction-result">
-                <h3>Prediction Result</h3>
-                <p>Random text for prediction result display</p>
-            </div>
+           
         </div>
     );
 };

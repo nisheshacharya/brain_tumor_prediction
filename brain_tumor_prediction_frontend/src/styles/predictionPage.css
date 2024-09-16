@@ -2,9 +2,6 @@
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 
-
-
-
 .prediction-page {
     display: flex;
     flex-direction: column;
@@ -61,12 +58,28 @@ h2 {
 /* Image display styles */
 .image-display-section {
     margin-top: 2rem;
+    padding: 12px;
+    text-align: center;
+    /* border: solid 1px black;
+    border-radius: 3%;
+    background-color: rgb(223, 231, 237);
+    max-width: 50%;
+    max-height: min-content;
+    overflow-x: scroll; */
+}
+.image-display-header {
+    margin: auto;
+    align-self: center;
 }
 
 .image-gallery {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    border: solid blue 2px;
+    
+    padding: 5px;
+
 }
 
 .image-container {
