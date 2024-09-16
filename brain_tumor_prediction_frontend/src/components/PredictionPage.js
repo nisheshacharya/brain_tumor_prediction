@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import '../styles/predictionPage.css';
-import Slider from 'react-slick';
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -8,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 const PredictionPage = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     // Valid file types
     const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
@@ -38,6 +40,9 @@ const PredictionPage = () => {
     const handleDelete = (index) => {
         setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
     };
+    const predictResult =()=>{
+        navigate('/result');
+    }
 
     return (
         <div className="prediction-page">
@@ -56,7 +61,7 @@ const PredictionPage = () => {
                     onChange={handleImageChange}
                     className="image-upload-input"
                 />
-                <button className="predict-button">Upload and Predict</button>
+                <button className="predict-button" onClick={predictResult}>Upload and Predict</button>
             </div>
 
             {error && <div className="error-message">{error}</div>}
