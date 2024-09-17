@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../styles/predictionPage.css';
 
@@ -10,6 +10,18 @@ const PredictionPage = () => {
     const [selectedModel, setSelectedModel] = useState({model:""});
     const [largeImage, setLargeImage] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        const handleEscapePress = (event) => {
+            if (event.key === 'Escape' && largeImage) {
+              closeLargeImage();
+            }
+          };
+        document.addEventListener('keydown', handleEscapePress)
+        return(()=>{
+            document.removeEventListener('keydown', handleEscapePress)
+        })
+    },[largeImage])
 
     // Valid file types
     const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
@@ -91,7 +103,7 @@ const PredictionPage = () => {
                     <div className="image-gallery">
                         {selectedImages.map((image, index) => (
                             <div key={index} className="image-container">
-                                <img src={image} alt={`selected-preview-${index}`} className="selected-image" onClick={()=> handleImageClick (image)} />
+                                <img src={image} alt={`selected-preview-${index}`} className="selected-image" onClick={()=> handleImageClick(image)} />
                                 <button onClick={() => handleDelete(index)} className="delete-button">×</button>
                             </div>
                         ))}
