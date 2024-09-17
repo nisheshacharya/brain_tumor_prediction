@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../styles/predictionPage.css';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 
 const PredictionPage = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [error, setError] = useState('');
     const [selectedModel, setSelectedModel] = useState({model:""});
+    const [largeImage, setLargeImage] = useState(null);
     const navigate = useNavigate();
 
     // Valid file types
@@ -48,6 +47,15 @@ const PredictionPage = () => {
     const handleDelete = (index) => {
         setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
     };
+
+       // Function to set the clicked image as large
+       const handleImageClick = (image) => {
+        setLargeImage(image);
+    };
+
+    const closeLargeImage = () => {
+        setLargeImage(null);
+    };
     const predictResult =()=>{
         console.log(selectedModel);
         selectedModel.model!== ""? navigate('/result'): alert("Select a model");
@@ -83,10 +91,18 @@ const PredictionPage = () => {
                     <div className="image-gallery">
                         {selectedImages.map((image, index) => (
                             <div key={index} className="image-container">
-                                <img src={image} alt={`selected-preview-${index}`} className="selected-image" />
+                                <img src={image} alt={`selected-preview-${index}`} className="selected-image" onClick={()=> handleImageClick (image)} />
                                 <button onClick={() => handleDelete(index)} className="delete-button">×</button>
                             </div>
                         ))}
+                    </div>
+                </div>
+            )}
+             {largeImage && (
+                <div className="large-image-overlay">
+                    <div className="large-image-container">
+                        <button className="close-large-image" onClick={closeLargeImage}>×</button>
+                        <img src={largeImage} alt="Large View" className="large-image" />
                     </div>
                 </div>
             )}
