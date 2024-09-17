@@ -9,6 +9,7 @@ const PredictionPage = () => {
     const [error, setError] = useState('');
     const [selectedModel, setSelectedModel] = useState({model:""});
     const [largeImage, setLargeImage] = useState(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(null);
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -61,13 +62,32 @@ const PredictionPage = () => {
     };
 
        // Function to set the clicked image as large
-       const handleImageClick = (image) => {
+       const handleImageClick = (image,index) => {
         setLargeImage(image);
+        setCurrentImageIndex(index)
     };
 
     const closeLargeImage = () => {
         setLargeImage(null);
+        setCurrentImageIndex(null);
     };
+
+    const showNextImage = () =>{
+        if(selectedImages.length>0){   
+            const nextIndex = (nextIndex +1)% selectedImages.length;
+            setLargeImage(selectedImages[nextIndex])
+            setCurrentImageIndex(nextIndex);
+        }
+    }
+    const showPreviousImage = () => {
+        if (selectedImages.length > 0) {
+            const prevIndex = (currentImageIndex - 1 + selectedImages.length) % selectedImages.length;
+            setLargeImage(selectedImages[prevIndex]);
+            setCurrentImageIndex(prevIndex);
+        }
+    };
+
+
     const predictResult =()=>{
         console.log(selectedModel);
         selectedModel.model!== ""? navigate('/result'): alert("Select a model");
@@ -103,7 +123,7 @@ const PredictionPage = () => {
                     <div className="image-gallery">
                         {selectedImages.map((image, index) => (
                             <div key={index} className="image-container">
-                                <img src={image} alt={`selected-preview-${index}`} className="selected-image" onClick={()=> handleImageClick(image)} />
+                                <img src={image} alt={`selected-preview-${index}`} className="selected-image" onClick={()=> handleImageClick(image, index)} />
                                 <button onClick={() => handleDelete(index)} className="delete-button">×</button>
                             </div>
                         ))}
