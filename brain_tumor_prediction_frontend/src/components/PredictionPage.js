@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
 import '../styles/predictionPage.css';
+import {sendImagesForPrediction} from '../network/network.js'
 
 
 
 const PredictionPage = () => {
     const [selectedImages, setSelectedImages] = useState([]);
+    const [fileObjects, setFileObjects] = useState([]); //to store image files
     const [error, setError] = useState('');
     const [selectedModel, setSelectedModel] = useState({model:""});
     const [largeImage, setLargeImage] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(null);
+    const [showResult, setShowResult] = useState(false);
+    const [prediction, setPrediction] = useState(null);
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -42,7 +46,7 @@ const PredictionPage = () => {
             if (validFormats.includes(file.type)) {
                 imagesArray.push(URL.createObjectURL(file));
             } else {
-                errorMessages.push(`${file.name} was not uploaded because only images are allowed.`);
+                errorMessages.push(`Upload unsuccessful because ${file.name} is not an image file.`);
             }
         });
 
@@ -50,6 +54,7 @@ const PredictionPage = () => {
             setError(errorMessages.join(' '));
         } else {
             setSelectedImages((prevImages) => [...prevImages, ...imagesArray]);
+            setFileObjects((prevFiles) => [...prevFiles, ...files]);
             setError(''); // Clearing any previous errors
         }
     };
@@ -63,6 +68,7 @@ const PredictionPage = () => {
     // Handler for deleting an image
     const handleDelete = (index) => {
         setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
+        setFileObjects((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
 
        // Function to set the clicked image as large
@@ -94,8 +100,20 @@ const PredictionPage = () => {
 
     const predictResult =()=>{
         console.log(selectedModel);
-        selectedModel.model!== ""? navigate('/result'): alert("Select a model");
-    }
+        // selectedModel.model!== ""? navigate('/result'): alert("Select a model");
+        if(selectedModel.model!== ""){
+            try{
+                const prediction = sendImagesForPrediction(fileObjects, selectedModel.model);
+                setPrediction(prediction)
+                setShowResult(true);
+            // navigate(('/result'));
+             }catch{
+                setError('Failed to get prediction');
+             }
+        }else{
+            alert("Select a model")
+        }
+    };
 
     return (
         <div className="prediction-page">
@@ -141,6 +159,12 @@ const PredictionPage = () => {
                         <img src={largeImage} alt="Large View" className="large-image" />
                     </div>
                 </div>
+            )}
+            {showResult && (
+               <div className="result-container">
+               <h2>Prediction Result:</h2>
+               <p>The probability of brain tumor is {prediction}%</p> {/* Display prediction */}
+           </div>
             )}
            
         </div>
