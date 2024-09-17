@@ -21,7 +21,7 @@ export const sendImagesForPrediction = async (images, model) => {
         formData.append('model', model);
 
         // Send POST request to backend
-        const response = await axios.post('/api/predict', formData, {
+        const response = await axios.post('backend enpoint', formData, { // write backend endpoint
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

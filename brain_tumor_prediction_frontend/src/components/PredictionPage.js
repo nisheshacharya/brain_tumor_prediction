@@ -98,12 +98,12 @@ const PredictionPage = () => {
     };
 
 
-    const predictResult =()=>{
+    const predictResult =async ()=>{
         console.log(selectedModel);
-        // selectedModel.model!== ""? navigate('/result'): alert("Select a model");
+       
         if(selectedModel.model!== ""){
             try{
-                const prediction = sendImagesForPrediction(fileObjects, selectedModel.model);
+                const prediction = await sendImagesForPrediction(fileObjects, selectedModel.model);
                 setPrediction(prediction)
                 setShowResult(true);
             // navigate(('/result'));
@@ -153,18 +153,23 @@ const PredictionPage = () => {
                 </div>
             )}
              {largeImage && (
-                <div className="large-image-overlay">
-                    <div className="large-image-container">
-                        <button className="close-large-image" onClick={closeLargeImage}>×</button>
-                        <img src={largeImage} alt="Large View" className="large-image" />
-                    </div>
-                </div>
+                 <div className="large-image-overlay">
+                 <div className="large-image-container">
+                   <button className="close-large-image" onClick={closeLargeImage}>
+                     ×
+                   </button>
+                   <img src={largeImage} alt="Large View" className="large-image" />
+                 </div>
+               </div>
             )}
             {showResult && (
-               <div className="result-container">
-               <h2>Prediction Result:</h2>
-               <p>The probability of brain tumor is {prediction}%</p> {/* Display prediction */}
-           </div>
+              <div className="result-container fancy-result">
+              <div className="result-header">Prediction Result</div>
+              <div className="result-content">
+                <div className="result-value">The probability of a brain tumor is <strong>{prediction}%</strong></div>
+                <div className="result-icon">🧠</div>
+              </div>
+            </div>
             )}
            
         </div>
