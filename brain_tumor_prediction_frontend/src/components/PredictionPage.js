@@ -16,13 +16,17 @@ const PredictionPage = () => {
         const handleEscapePress = (event) => {
             if (event.key === 'Escape' && largeImage) {
               closeLargeImage();
+            }else if(event.key === 'ArrowRight' && largeImage){
+                showNextImage();   
+            }else if(event.key === 'ArrowLeft' && largeImage){
+                showPreviousImage();
             }
           };
         document.addEventListener('keydown', handleEscapePress)
         return(()=>{
             document.removeEventListener('keydown', handleEscapePress)
         })
-    },[largeImage])
+    },[largeImage, selectedImages, currentImageIndex])
 
     // Valid file types
     const validFormats = ['image/jpeg', 'image/png', 'image/gif'];
@@ -74,7 +78,7 @@ const PredictionPage = () => {
 
     const showNextImage = () =>{
         if(selectedImages.length>0){   
-            const nextIndex = (nextIndex +1)% selectedImages.length;
+            const nextIndex = (currentImageIndex +1)% selectedImages.length;
             setLargeImage(selectedImages[nextIndex])
             setCurrentImageIndex(nextIndex);
         }
